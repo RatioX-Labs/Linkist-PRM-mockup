@@ -1049,14 +1049,7 @@ lucide.createIcons({icons});\``);if(typeof c>"u")throw new Error("`createIcons()
 </script>
 </head>
 <body>
-<section id="linkist-startup-fallback" style="position:fixed;inset:0;z-index:99999;overflow:auto;background:#F4F1EA;color:#17181A;font-family:Arial,sans-serif;padding:48px 26px;box-sizing:border-box;line-height:1.5;color-scheme:only light">
-<h1 style="color:#17181A;font-size:30px;margin:0 0 24px">Linkist</h1>
-<h2 style="color:#17181A;font-size:23px">Open the interactive preview in a browser</h2>
-<p>This viewer may not run interactive HTML files. Download the file and open it in a browser that supports JavaScript.</p>
-<p>On iPhone, an attachment or Files preview may not support this mockup. For reliable mobile testing, the file needs to be served from a website and opened as a link in Safari.</p>
-<p id="linkist-startup-error" role="status">If this message remains in a browser, the preview did not finish loading.</p>
-<noscript><p>JavaScript is disabled in this viewer.</p></noscript>
-</section>
+
 <div aria-label="Linkist Pro interactive app mockup" id="linkist-pro" style="max-width:390px;margin:0 auto;font-family:DM Sans,Arial,sans-serif;color-scheme:light"><template id="linkist-source">
 
 
@@ -3126,24 +3119,7 @@ body{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 const root=document.getElementById('linkist-pro');
 function syncUnderlay(){const layout=root.querySelector('.ip-layout');if(layout){const active=!!root.querySelector('.la-auth');layout.classList.toggle('la-underlay',active);layout.inert=active;}}
 new MutationObserver(syncUnderlay).observe(root,{childList:true,subtree:true});syncUnderlay();
-(function(){
- const fallback=document.getElementById('linkist-startup-fallback');
- if(!fallback)return;
- fallback.style.display='none';
- setTimeout(()=>{if(fallback)fallback.remove();},100);
- function tryRemove(attempt){
-  const fb=document.getElementById('linkist-startup-fallback');
-  if(!fb)return;
-  const screen=root.querySelector('.la-auth')||root.querySelector('.ip-layout')||document.querySelector('[role="tablist"]');
-  if(screen){
-   const box=screen.getBoundingClientRect();
-   if(box && (box.width>0 && box.height>0 || attempt>10)){fb.remove();return;}
-  }
-  if(attempt<200){requestAnimationFrame(()=>tryRemove(attempt+1));}
-  else{fb.remove();}
- }
- tryRemove(0);
-})();
+
 function resize(){const height=window.visualViewport?.height||window.innerHeight;root.style.setProperty('--linkist-viewport-height',height+'px');}
 resize();window.addEventListener('resize',resize);window.visualViewport?.addEventListener('resize',resize);
 root.addEventListener('click',e=>{if(e.target.closest('[data-restart-preview]'))location.reload();},true);
