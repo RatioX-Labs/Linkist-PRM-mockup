@@ -2,48 +2,423 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Linkist - Interactive Mobile Mockup</title>
+    <title>Linkist - Personal Relationship Management</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { width: 100%; height: 100%; background: #F4F1EA; }
-        body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-touch-callout: none; }
+        html { height: 100%; }
+        body { 
+            width: 100vw; 
+            height: 100vh; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'DM Sans', sans-serif;
+            background: #F4F1EA;
+            color: #17181A;
+            overflow: hidden;
+        }
         #root { width: 100%; height: 100%; display: flex; flex-direction: column; }
-        .app { width: 100%; height: 100%; display: flex; flex-direction: column; background: #F4F1EA; color: #17181A; }
-        .content { flex: 1; overflow-y: auto; padding: 0; -webkit-overflow-scrolling: touch; }
-        .screen { padding: 20px; animation: fadeIn 0.3s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .nav-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border-top: 1px solid #E2DED3; background: #FBF9F4; padding: 8px 0; }
-        .nav-item { padding: 12px 8px; text-align: center; font-size: 12px; cursor: pointer; border: none; background: none; color: #6B6A66; transition: color 0.2s; }
-        .nav-item.active { color: #B1394B; font-weight: 600; }
-        .card { background: white; border: 0.5px solid #E2DED3; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
-        .header { font-size: 14px; color: #6B6A66; text-transform: uppercase; letter-spacing: 0.15em; margin: 20px 0 10px; font-weight: 600; }
-        .heading { font-size: 28px; font-weight: 500; margin: 16px 0; color: #17181A; }
-        .subheading { font-size: 16px; font-weight: 600; margin: 12px 0 8px; color: #2a2a2a; }
-        .text { font-size: 14px; line-height: 1.5; color: #6B6A66; margin: 8px 0; }
-        .button { background: #B1394B; color: white; border: none; padding: 12px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; margin: 8px 4px 8px 0; }
-        .button:active { opacity: 0.9; }
-        .button-outline { background: transparent; color: #6B6A66; border: 0.5px solid #E2DED3; padding: 10px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; }
-        .person { display: flex; gap: 12px; align-items: flex-start; margin: 12px 0; }
-        .avatar { width: 36px; height: 36px; border-radius: 50%; background: #EAE6DC; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #6B6A66; flex-shrink: 0; }
-        .person-info { flex: 1; }
-        .person-name { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
-        .person-meta { font-size: 12px; color: #6B6A66; }
-        .stat { text-align: center; }
-        .stat-number { font-size: 24px; font-weight: 500; margin-bottom: 4px; }
-        .stat-label { font-size: 13px; color: #6B6A66; }
-        .form-field { margin: 16px 0; }
-        .form-field label { display: block; font-size: 14px; color: #6B6A66; margin-bottom: 6px; }
-        .form-field input, .form-field select { width: 100%; padding: 10px; border: 0.5px solid #E2DED3; border-radius: 8px; font-size: 14px; font-family: inherit; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .contact-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 0.5px solid #E2DED3; cursor: pointer; }
-        .contact-item:last-child { border-bottom: none; }
-        .back-btn { background: none; border: none; color: #6B6A66; font-size: 18px; cursor: pointer; margin-bottom: 16px; }
+        
+        .app-container { 
+            width: 100%; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            background: #F4F1EA;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        
+        .app-header { 
+            padding: 12px 16px; 
+            background: #FBF9F4; 
+            border-bottom: 1px solid #E2DED3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .app-header h1 { 
+            font-size: 18px; 
+            font-weight: 600; 
+            color: #17181A; 
+        }
+        
+        .app-header-right { 
+            display: flex; 
+            gap: 12px; 
+        }
+        
+        .header-btn { 
+            background: none; 
+            border: none; 
+            font-size: 20px; 
+            cursor: pointer; 
+            color: #6B6A66;
+            padding: 4px;
+        }
+        
+        .content-area { 
+            flex: 1; 
+            overflow-y: auto; 
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 56px;
+        }
+        
+        .screen { 
+            padding: 16px; 
+            animation: fadeIn 0.2s ease-in;
+        }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
+        }
+        
+        .auth-screen {
+            background: linear-gradient(135deg, #F4F1EA 0%, #FBF9F4 100%);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .logo { 
+            width: 64px; 
+            height: 64px; 
+            background: #B1394B; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 32px; 
+            font-weight: 700;
+            color: white;
+            margin-bottom: 24px;
+        }
+        
+        .auth-title { 
+            font-size: 24px; 
+            font-weight: 500; 
+            margin-bottom: 8px; 
+            text-align: center;
+        }
+        
+        .auth-subtitle { 
+            font-size: 14px; 
+            color: #6B6A66; 
+            margin-bottom: 32px; 
+            text-align: center;
+        }
+        
+        .auth-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px;
+            border: 1px solid #E2DED3;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            font-family: inherit;
+        }
+        
+        .auth-button {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px;
+            background: #B1394B;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+        
+        .auth-link {
+            font-size: 13px;
+            color: #B1394B;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .section-header { 
+            font-size: 12px; 
+            color: #6B6A66; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin: 20px 0 12px; 
+            font-weight: 600;
+        }
+        
+        .card { 
+            background: white; 
+            border: 0.5px solid #E2DED3; 
+            border-radius: 12px; 
+            padding: 16px; 
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+        }
+        
+        .card:active { 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+        }
+        
+        .card-title { 
+            font-size: 15px; 
+            font-weight: 600; 
+            margin-bottom: 6px;
+            color: #17181A;
+        }
+        
+        .card-subtitle { 
+            font-size: 13px; 
+            color: #6B6A66; 
+            line-height: 1.4;
+        }
+        
+        .contact-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 12px 0; 
+            border-bottom: 0.5px solid #E2DED3; 
+            cursor: pointer;
+        }
+        
+        .contact-item:last-child { 
+            border-bottom: none; 
+        }
+        
+        .contact-info {
+            flex: 1;
+        }
+        
+        .contact-name { 
+            font-weight: 600; 
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        
+        .contact-meta { 
+            font-size: 12px; 
+            color: #6B6A66;
+        }
+        
+        .avatar { 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background: #EAE6DC; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 14px; 
+            font-weight: 600; 
+            color: #6B6A66; 
+            flex-shrink: 0;
+            margin-right: 12px;
+        }
+        
+        .person { 
+            display: flex; 
+            gap: 12px; 
+            margin-bottom: 16px;
+        }
+        
+        .button { 
+            background: #B1394B; 
+            color: white; 
+            border: none; 
+            padding: 11px 16px; 
+            border-radius: 8px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            cursor: pointer;
+            margin: 6px 6px 6px 0;
+        }
+        
+        .button-outline { 
+            background: transparent; 
+            color: #6B6A66; 
+            border: 0.5px solid #E2DED3; 
+            padding: 10px 14px; 
+            border-radius: 8px; 
+            font-size: 13px; 
+            cursor: pointer;
+            margin: 6px 6px 6px 0;
+        }
+        
+        .back-button {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #6B6A66;
+            padding: 8px;
+            margin: -8px 0 16px -8px;
+        }
+        
+        .form-field { 
+            margin-bottom: 16px;
+        }
+        
+        .form-label { 
+            display: block; 
+            font-size: 13px; 
+            color: #6B6A66; 
+            margin-bottom: 6px; 
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 0.5px solid #E2DED3;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #17181A;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #B1394B;
+        }
+        
+        .stat { 
+            text-align: center; 
+        }
+        
+        .stat-number { 
+            font-size: 24px; 
+            font-weight: 600; 
+            margin-bottom: 4px;
+        }
+        
+        .stat-label { 
+            font-size: 12px; 
+            color: #6B6A66;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .nav-bar { 
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 0; 
+            border-top: 0.5px solid #E2DED3; 
+            background: #FBF9F4; 
+            padding: 8px 0; 
+            z-index: 20;
+        }
+        
+        .nav-item { 
+            padding: 12px 8px; 
+            text-align: center; 
+            font-size: 11px; 
+            cursor: pointer; 
+            border: none; 
+            background: none; 
+            color: #6B6A66; 
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+        
+        .nav-item.active { 
+            color: #B1394B; 
+        }
+        
+        .nudge-card {
+            border-left: 4px solid #B1394B;
+            background: white;
+            border: 0.5px solid #E2DED3;
+            border-left: 4px solid #B1394B;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .nudge-label {
+            font-size: 11px;
+            color: #B1394B;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .input-search {
+            width: 100%;
+            padding: 10px;
+            border: 0.5px solid #E2DED3;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            font-family: inherit;
+        }
+        
+        .detail-screen {
+            padding: 16px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: #EAE6DC;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            margin: 4px 4px 4px 0;
+            color: #17181A;
+        }
+        
+        .toggle-switch {
+            display: inline-block;
+            width: 48px;
+            height: 28px;
+            background: #E2DED3;
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .toggle-switch.active {
+            background: #B1394B;
+        }
+        
+        .toggle-circle {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.2s;
+        }
+        
+        .toggle-switch.active .toggle-circle {
+            left: 22px;
+        }
     </style>
 </head>
 <body>
@@ -52,79 +427,117 @@
         const { useState } = React;
 
         const CONTACTS = [
-            { id: 1, name: 'Biji Thomas', company: 'Bettroi FZE', title: 'CEO & Founder', type: 'work' },
-            { id: 2, name: 'Surya Murali', company: '', title: 'Professional', type: 'personal' },
-            { id: 3, name: 'Shrinivasa K', company: 'Axis Bank', title: 'Banking', type: 'work' },
-            { id: 4, name: 'Frederic P.', company: 'Capgemini', title: 'Partner', type: 'work' },
-            { id: 5, name: 'Vikram P.', company: 'Emirates NBD', title: 'SVP Regional Head', type: 'work' },
+            { id: 1, initials: 'BT', name: 'Biji Thomas', company: 'Bettroi FZE', title: 'CEO & Founder', lastContact: '4 days ago' },
+            { id: 2, initials: 'SM', name: 'Surya Murali', company: 'RatioX Labs', title: 'Associate', lastContact: '2 weeks ago' },
+            { id: 3, initials: 'SK', name: 'Shrinivasa K', company: 'Axis Bank', title: 'Senior Manager', lastContact: '1 month ago' },
+            { id: 4, initials: 'FP', name: 'Frederic P.', company: 'Capgemini', title: 'Partner', lastContact: '3 months ago' },
+            { id: 5, initials: 'VP', name: 'Vikram P.', company: 'Emirates NBD', title: 'SVP Regional', lastContact: '6 months ago' },
+            { id: 6, initials: 'NV', name: 'Neeraj Varma', company: 'RatioX Labs', title: 'Co-founder', lastContact: 'Today' },
         ];
 
-        function HomeScreen() {
-            const [activeNudge, setActiveNudge] = useState(null);
+        function AuthScreen({ onSignup, onLogin }) {
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+            const [isLogin, setIsLogin] = useState(true);
+
+            return (
+                <div className="auth-screen">
+                    <div className="logo">7</div>
+                    <h1 className="auth-title">Linkist</h1>
+                    <p className="auth-subtitle" style={{ color: '#6B6A66' }}>Good to see you again.</p>
+                    <p className="auth-subtitle" style={{ marginBottom: '24px', fontSize: '12px' }}>Sign in securely with Face ID or your password.</p>
+                    
+                    <input 
+                        type="email" 
+                        className="auth-input" 
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <input 
+                        type="password" 
+                        className="auth-input" 
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    
+                    <button className="auth-button" onClick={() => onLogin(email, password)}>
+                        Sign in with password →
+                    </button>
+                    <button className="auth-button" style={{ background: '#EAE6DC', color: '#17181A' }} onClick={() => alert('Face ID would authenticate here')}>
+                        👤 Face ID
+                    </button>
+                    
+                    <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '13px' }}>
+                        <span style={{ color: '#6B6A66' }}>New to Linkist? </span>
+                        <a className="auth-link" onClick={() => setIsLogin(!isLogin)}>Create an account</a>
+                    </div>
+                </div>
+            );
+        }
+
+        function HomeScreen({ user }) {
+            const [selectedNudge, setSelectedNudge] = useState(null);
+
+            if (selectedNudge) {
+                return (
+                    <div className="screen">
+                        <button className="back-button" onClick={() => setSelectedNudge(null)}>← Back</button>
+                        <h2 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '16px' }}>Follow up with {selectedNudge.name}</h2>
+                        <div className="form-field">
+                            <label className="form-label">Your message</label>
+                            <textarea 
+                                className="form-input" 
+                                style={{ minHeight: '100px', resize: 'none' }}
+                                placeholder="Write your message..."
+                            />
+                        </div>
+                        <button className="button">Send message</button>
+                        <button className="button-outline">Save as draft</button>
+                    </div>
+                );
+            }
+
             return (
                 <div className="screen">
-                    <div style={{ fontSize: '12px', color: '#6B6A66', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '16px' }}>
+                    <div style={{ fontSize: '12px', color: '#6B6A66', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '16px' }}>
                         Good evening Dubai
                     </div>
-                    <h1 className="heading">Liju<span style={{ color: '#B1394B' }}>.</span></h1>
-                    <p className="text" style={{ marginBottom: '24px' }}>Make room for a meaningful connection.</p>
+                    <h1 style={{ fontSize: '32px', fontWeight: '500', marginBottom: '8px' }}>
+                        Liju<span style={{ color: '#B1394B' }}>.</span>
+                    </h1>
+                    <p style={{ fontSize: '14px', color: '#6B6A66', marginBottom: '24px' }}>Make room for a meaningful connection.</p>
 
-                    <div className="header">Today, with intention</div>
+                    <div className="section-header">Today, with intention</div>
 
-                    {!activeNudge ? (
-                        <>
-                            <div className="card" style={{ borderLeft: '4px solid #B1394B' }}>
-                                <div style={{ fontSize: '12px', color: '#B1394B', textTransform: 'uppercase', marginBottom: '8px' }}>Your next best step</div>
-                                <h3 className="subheading">Pick up where you left off.</h3>
-                                <div className="person">
-                                    <div className="avatar">BT</div>
-                                    <div className="person-info">
-                                        <div className="person-name">Biji Thomas</div>
-                                        <div className="person-meta">Bettroi FZE · 4 days ago</div>
-                                    </div>
-                                </div>
-                                <p className="text">You discussed the ambassador programme. A thoughtful follow-up keeps the conversation moving.</p>
-                                <button className="button" onClick={() => setActiveNudge('biji')}>Review follow-up →</button>
-                                <button className="button-outline" onClick={() => setActiveNudge(null)}>Later</button>
+                    <div className="nudge-card" onClick={() => setSelectedNudge(CONTACTS[0])}>
+                        <div className="nudge-label">Your next best step</div>
+                        <h3 className="card-title">Pick up where you left off.</h3>
+                        <div className="person">
+                            <div className="avatar">{CONTACTS[0].initials}</div>
+                            <div style={{ flex: 1 }}>
+                                <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '2px' }}>{CONTACTS[0].name}</div>
+                                <div style={{ fontSize: '12px', color: '#6B6A66' }}>{CONTACTS[0].company} · {CONTACTS[0].lastContact}</div>
                             </div>
+                        </div>
+                        <p style={{ fontSize: '13px', color: '#6B6A66', lineHeight: '1.4', marginTop: '12px' }}>You discussed the ambassador programme. A thoughtful follow-up keeps the conversation moving.</p>
+                    </div>
 
-                            <div className="card" style={{ cursor: 'pointer' }} onClick={() => setActiveNudge('surya')}>
-                                <div className="person">
-                                    <div className="avatar">SM</div>
-                                    <div className="person-info">
-                                        <div className="person-name">Add context</div>
-                                        <div style={{ fontSize: '14px', fontWeight: '500', marginTop: '4px' }}>Remember why you connected</div>
-                                        <div className="person-meta">Surya Murali · Recent exchange</div>
-                                    </div>
+                    {CONTACTS.slice(1, 3).map(contact => (
+                        <div key={contact.id} className="card" onClick={() => setSelectedNudge(contact)}>
+                            <div className="person" style={{ marginBottom: 0 }}>
+                                <div className="avatar">{contact.initials}</div>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ fontWeight: '600', fontSize: '14px', marginBottom: '4px' }}>Add context</div>
+                                    <div style={{ fontSize: '13px', fontWeight: '500', marginBottom: '4px', color: '#17181A' }}>Remember why you connected</div>
+                                    <div style={{ fontSize: '12px', color: '#6B6A66' }}>{contact.name} · {contact.lastContact}</div>
                                 </div>
                             </div>
+                        </div>
+                    ))}
 
-                            <div className="card" style={{ cursor: 'pointer' }} onClick={() => setActiveNudge('shri')}>
-                                <div className="person">
-                                    <div className="avatar">SK</div>
-                                    <div className="person-info">
-                                        <div className="person-name">Reconnect</div>
-                                        <div style={{ fontSize: '14px', fontWeight: '500', marginTop: '4px' }}>Keep a good connection warm</div>
-                                        <div className="person-meta">Shrinivasa K · Referral source</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </>
-                    ) : (
-                        <>
-                            <button className="back-btn" onClick={() => setActiveNudge(null)}>← Back</button>
-                            <div className="card">
-                                <h3 className="subheading">Follow up with {activeNudge === 'biji' ? 'Biji' : activeNudge === 'surya' ? 'Surya' : 'Shrinivasa'}</h3>
-                                <div className="form-field">
-                                    <label>Your message</label>
-                                    <textarea style={{ width: '100%', minHeight: '100px', padding: '10px', border: '0.5px solid #E2DED3', borderRadius: '8px', fontFamily: 'inherit', fontSize: '14px' }} placeholder="Write your message..."></textarea>
-                                </div>
-                                <button className="button">Send message</button>
-                            </div>
-                        </>
-                    )}
-
-                    <div className="header" style={{ marginTop: '32px' }}>Your network</div>
+                    <div className="section-header" style={{ marginTop: '32px' }}>Your network</div>
                     <div className="grid-2">
                         <div className="card">
                             <div className="stat">
@@ -145,125 +558,191 @@
 
         function ContactsScreen() {
             const [selected, setSelected] = useState(null);
+            const [search, setSearch] = useState('');
+
+            if (selected) {
+                return (
+                    <div className="detail-screen">
+                        <button className="back-button" onClick={() => setSelected(null)}>← Back</button>
+                        <div className="person">
+                            <div className="avatar" style={{ width: '48px', height: '48px', fontSize: '18px' }}>{selected.initials}</div>
+                            <div style={{ flex: 1 }}>
+                                <h2 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '4px' }}>{selected.name}</h2>
+                                <p style={{ fontSize: '13px', color: '#6B6A66' }}>{selected.title}</p>
+                                <p style={{ fontSize: '13px', color: '#6B6A66', fontWeight: '500' }}>{selected.company}</p>
+                            </div>
+                        </div>
+                        <div style={{ marginTop: '24px' }}>
+                            <button className="button" style={{ width: '100%', marginBottom: '8px' }}>Send message</button>
+                            <button className="button-outline" style={{ width: '100%' }}>Request introduction</button>
+                        </div>
+                        <div className="section-header" style={{ marginTop: '24px' }}>Activity</div>
+                        <div className="card">
+                            <div style={{ fontSize: '13px', color: '#6B6A66' }}>Last contact: {selected.lastContact}</div>
+                        </div>
+                    </div>
+                );
+            }
+
+            const filtered = CONTACTS.filter(c => c.name.toLowerCase().includes(search.toLowerCase()));
+
             return (
                 <div className="screen">
-                    {!selected ? (
-                        <>
-                            <h1 className="heading">Contacts</h1>
-                            <div style={{ marginBottom: '12px' }}>
-                                <input type="text" placeholder="Search contacts..." style={{ width: '100%', padding: '10px', border: '0.5px solid #E2DED3', borderRadius: '8px', fontSize: '14px' }} />
-                            </div>
-                            {CONTACTS.map(contact => (
-                                <div key={contact.id} className="contact-item" onClick={() => setSelected(contact)}>
-                                    <div>
-                                        <div style={{ fontWeight: '500', fontSize: '14px' }}>{contact.name}</div>
-                                        <div style={{ fontSize: '12px', color: '#6B6A66' }}>{contact.company || contact.title}</div>
-                                    </div>
-                                    <span style={{ color: '#6B6A66' }}>›</span>
-                                </div>
-                            ))}
-                        </>
-                    ) : (
-                        <>
-                            <button className="back-btn" onClick={() => setSelected(null)}>← Back</button>
-                            <div className="person">
-                                <div className="avatar">{selected.name.charAt(0)}{selected.name.split(' ')[1]?.charAt(0)}</div>
-                                <div className="person-info">
-                                    <h2 className="subheading">{selected.name}</h2>
-                                    <div className="text">{selected.title}</div>
-                                    <div className="text">{selected.company}</div>
+                    <h1 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '16px' }}>Contacts</h1>
+                    <input 
+                        type="text" 
+                        className="input-search"
+                        placeholder="Search contacts..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                    {filtered.map(contact => (
+                        <div key={contact.id} className="contact-item" onClick={() => setSelected(contact)}>
+                            <div className="person" style={{ margin: 0 }}>
+                                <div className="avatar">{contact.initials}</div>
+                                <div className="contact-info">
+                                    <div className="contact-name">{contact.name}</div>
+                                    <div className="contact-meta">{contact.company || contact.title}</div>
                                 </div>
                             </div>
-                            <div className="card">
-                                <button className="button" style={{ width: '100%' }}>Send message</button>
-                                <button className="button-outline" style={{ width: '100%', marginTop: '8px' }}>Request introduction</button>
-                            </div>
-                        </>
-                    )}
+                            <span style={{ color: '#6B6A66', fontSize: '18px' }}>›</span>
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        function ConnectScreen() {
+            return (
+                <div className="screen">
+                    <h1 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '16px' }}>Connect</h1>
+                    <p style={{ fontSize: '14px', color: '#6B6A66', marginBottom: '24px', lineHeight: '1.5' }}>Find and connect with professionals. Build meaningful relationships through curated introductions.</p>
+                    
+                    <div className="section-header">Suggested connections</div>
+                    {[
+                        { name: 'Alex Chen', title: 'Venture Capitalist', mutual: '3 mutual connections' },
+                        { name: 'Sarah Williams', title: 'Product Director', mutual: '5 mutual connections' },
+                    ].map((person, i) => (
+                        <div key={i} className="card">
+                            <div style={{ fontWeight: '600', marginBottom: '4px' }}>{person.name}</div>
+                            <div style={{ fontSize: '13px', color: '#6B6A66', marginBottom: '8px' }}>{person.title}</div>
+                            <div style={{ fontSize: '12px', color: '#B1394B', marginBottom: '12px' }}>🔗 {person.mutual}</div>
+                            <button className="button">Connect</button>
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        function CardsScreen() {
+            return (
+                <div className="screen">
+                    <h1 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '16px' }}>Cards</h1>
+                    <p style={{ fontSize: '14px', color: '#6B6A66', marginBottom: '24px' }}>Your digital presence and NFC cards.</p>
+                    
+                    <div className="section-header">Your cards</div>
+                    <div className="card">
+                        <div style={{ fontWeight: '600', marginBottom: '8px' }}>Linkist Starter</div>
+                        <div style={{ fontSize: '13px', color: '#6B6A66', marginBottom: '12px' }}>AED 109</div>
+                        <button className="button">Customize</button>
+                    </div>
+                    
+                    <div className="card">
+                        <div style={{ fontWeight: '600', marginBottom: '8px' }}>Linkist Signature</div>
+                        <div style={{ fontSize: '13px', color: '#6B6A66', marginBottom: '12px' }}>AED 369</div>
+                        <button className="button">Customize</button>
+                    </div>
                 </div>
             );
         }
 
         function SettingsScreen() {
-            return (
-                <div className="screen">
-                    <h1 className="heading">Settings</h1>
-                    <div className="header">Appearance</div>
-                    <div className="form-field">
-                        <label>Theme</label>
-                        <select>
-                            <option>Auto</option>
-                            <option>Light</option>
-                            <option>Dark</option>
-                        </select>
-                    </div>
-                    <div className="header" style={{ marginTop: '24px' }}>Profile Sharing</div>
-                    <div className="form-field">
-                        <label>Who can see your profile</label>
-                        <select>
-                            <option>Exchange first</option>
-                            <option>Members only</option>
-                            <option>Anyone</option>
-                        </select>
-                    </div>
-                    <div className="header" style={{ marginTop: '24px' }}>Notifications</div>
-                    <div style={{ padding: '12px 0', borderBottom: '0.5px solid #E2DED3' }}>
-                        <div style={{ fontWeight: '500', marginBottom: '4px' }}>Follow-up reminders</div>
-                        <input type="checkbox" defaultChecked /> <span style={{ fontSize: '14px', color: '#6B6A66' }}>Enabled</span>
-                    </div>
-                    <div style={{ padding: '12px 0' }}>
-                        <div style={{ fontWeight: '500', marginBottom: '4px' }}>Email digests</div>
-                        <input type="checkbox" /> <span style={{ fontSize: '14px', color: '#6B6A66' }}>Disabled</span>
-                    </div>
-                </div>
-            );
-        }
+            const [theme, setTheme] = useState('auto');
+            const [notifications, setNotifications] = useState(true);
 
-        function ProfileScreen() {
             return (
                 <div className="screen">
-                    <h1 className="heading">Your Profile</h1>
-                    <div className="person">
-                        <div className="avatar" style={{ width: '48px', height: '48px', fontSize: '18px' }}>LM</div>
-                        <div className="person-info">
-                            <h2 className="subheading">Liju Mathew</h2>
-                            <div className="text">Founder & CEO</div>
-                            <div className="text">RatioX Labs DWC-LLC</div>
+                    <h1 style={{ fontSize: '24px', fontWeight: '600', marginBottom: '16px' }}>You</h1>
+                    
+                    <div className="section-header">Account</div>
+                    <div className="card">
+                        <div style={{ fontWeight: '600', marginBottom: '4px' }}>Liju Mathew</div>
+                        <div style={{ fontSize: '13px', color: '#6B6A66' }}>liju@ratiox.io</div>
+                    </div>
+                    
+                    <div className="section-header">Preferences</div>
+                    <div className="card">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                            <div>
+                                <div style={{ fontWeight: '600', marginBottom: '2px' }}>Theme</div>
+                                <div style={{ fontSize: '12px', color: '#6B6A66' }}>Light, dark, or auto</div>
+                            </div>
+                            <select value={theme} onChange={(e) => setTheme(e.target.value)} style={{ padding: '6px', borderRadius: '4px', border: '0.5px solid #E2DED3' }}>
+                                <option>Auto</option>
+                                <option>Light</option>
+                                <option>Dark</option>
+                            </select>
+                        </div>
+                        <div style={{ borderTop: '0.5px solid #E2DED3', paddingTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <div>
+                                <div style={{ fontWeight: '600', marginBottom: '2px' }}>Notifications</div>
+                                <div style={{ fontSize: '12px', color: '#6B6A66' }}>Follow-up reminders</div>
+                            </div>
+                            <div className={`toggle-switch ${notifications ? 'active' : ''}`} onClick={() => setNotifications(!notifications)}>
+                                <div className="toggle-circle" />
+                            </div>
                         </div>
                     </div>
-                    <div className="header" style={{ marginTop: '24px' }}>About</div>
-                    <div className="text">Building tools for relationship intelligence. Based in Dubai. Passionate about connecting people meaningfully.</div>
-                    <div className="header" style={{ marginTop: '24px' }}>Skills & Interests</div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                        {['Product strategy', 'Startup ecosystems', 'Data analysis', 'Angel investing'].map(skill => (
-                            <div key={skill} style={{ background: '#EAE6DC', padding: '8px 12px', borderRadius: '16px', fontSize: '13px' }}>{skill}</div>
-                        ))}
+                    
+                    <div className="section-header">About</div>
+                    <div className="card">
+                        <div style={{ fontSize: '13px', color: '#6B6A66', lineHeight: '1.5' }}>
+                            Linkist v1.0<br/>
+                            © 2025 RatioX Labs DWC-LLC<br/>
+                            Dubai, UAE
+                        </div>
                     </div>
-                    <button className="button" style={{ width: '100%', marginTop: '24px' }}>Edit profile</button>
+                    
+                    <button className="button-outline" style={{ width: '100%', marginTop: '16px' }}>Sign out</button>
                 </div>
             );
         }
 
         function App() {
-            const [tab, setTab] = useState('home');
+            const [currentTab, setCurrentTab] = useState('home');
+            const [isLoggedIn, setIsLoggedIn] = useState(false);
+            const [user, setUser] = useState(null);
+
+            const handleLogin = (email, password) => {
+                if (email && password) {
+                    setIsLoggedIn(true);
+                    setUser({ email, name: 'Liju Mathew' });
+                }
+            };
+
+            if (!isLoggedIn) {
+                return <AuthScreen onLogin={handleLogin} />;
+            }
 
             const screens = {
-                home: <HomeScreen />,
+                home: <HomeScreen user={user} />,
                 contacts: <ContactsScreen />,
-                connect: <div className="screen"><h1 className="heading">Connect</h1><p className="text">Find and connect with professionals in your network.</p></div>,
-                cards: <div className="screen"><h1 className="heading">Cards</h1><p className="text">Manage your NFC cards and digital presence.</p></div>,
+                connect: <ConnectScreen />,
+                cards: <CardsScreen />,
                 you: <SettingsScreen />
             };
 
             return (
-                <div className="app">
-                    <div className="content">{screens[tab]}</div>
+                <div className="app-container">
+                    <div className="content-area">
+                        {screens[currentTab]}
+                    </div>
                     <div className="nav-bar">
-                        <button className={`nav-item ${tab === 'home' ? 'active' : ''}`} onClick={() => setTab('home')}>Home</button>
-                        <button className={`nav-item ${tab === 'contacts' ? 'active' : ''}`} onClick={() => setTab('contacts')}>Contacts</button>
-                        <button className={`nav-item ${tab === 'connect' ? 'active' : ''}`} onClick={() => setTab('connect')}>Connect</button>
-                        <button className={`nav-item ${tab === 'cards' ? 'active' : ''}`} onClick={() => setTab('cards')}>Cards</button>
-                        <button className={`nav-item ${tab === 'you' ? 'active' : ''}`} onClick={() => setTab('you')}>You</button>
+                        <button className={`nav-item ${currentTab === 'home' ? 'active' : ''}`} onClick={() => setCurrentTab('home')}>Home</button>
+                        <button className={`nav-item ${currentTab === 'contacts' ? 'active' : ''}`} onClick={() => setCurrentTab('contacts')}>Contacts</button>
+                        <button className={`nav-item ${currentTab === 'connect' ? 'active' : ''}`} onClick={() => setCurrentTab('connect')}>Connect</button>
+                        <button className={`nav-item ${currentTab === 'cards' ? 'active' : ''}`} onClick={() => setCurrentTab('cards')}>Cards</button>
+                        <button className={`nav-item ${currentTab === 'you' ? 'active' : ''}`} onClick={() => setCurrentTab('you')}>You</button>
                     </div>
                 </div>
             );
